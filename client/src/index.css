@@ -17,3 +17,7 @@ body{
   background-color: #008080;
   color: white;
 }
+
+#myTasksBox::-webkit-scrollbar{
+  display: none;
+}
