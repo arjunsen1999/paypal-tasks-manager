@@ -38,6 +38,7 @@ const LinkItems = [
   { name: "Home", icon: FiHome, route : "/" },
   { name: "Sprint", icon: GiSprint, route : "/sprint" },
   { name: "My Tasks", icon: FaTasks, route : "/tasks" },
+  { name: "Loading", icon: FiHome, route : "/loading" },
 ];
 
 export default function SidebarWithHeader({ children }) {
