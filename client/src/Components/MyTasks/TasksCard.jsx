@@ -69,12 +69,12 @@ export default function TasksCard() {
                     </Heading>
                   </Box>
                   <Box>
-                  <Heading fontSize={"18px"}>Title</Heading>
+                    <Heading fontSize={"18px"}>Title</Heading>
                   </Box>
                   <Box>
-                  <Badge variant='outline' colorScheme='green'>
-    Default
-  </Badge>
+                    <Badge variant="outline" colorScheme="green">
+                      Default
+                    </Badge>
                   </Box>
                   <Box mb="10px">
                     <Text textAlign={"left"}>
@@ -98,16 +98,15 @@ export default function TasksCard() {
                 </Stack>
               </Flex>
               <Stack>
-
-              <Menu>
-                <MenuButton as={Button} h="20px">
-                  <BsThreeDots />
-                </MenuButton>
-                <MenuList>
-                <MenuItem >Progress</MenuItem>
-                <MenuItem >Done</MenuItem>
-                </MenuList>
-              </Menu>
+                <Menu>
+                  <MenuButton as={Button} h="20px">
+                    <BsThreeDots />
+                  </MenuButton>
+                  <MenuList>
+                    <MenuItem>Progress</MenuItem>
+                    <MenuItem>Done</MenuItem>
+                  </MenuList>
+                </Menu>
               </Stack>
             </Flex>
 

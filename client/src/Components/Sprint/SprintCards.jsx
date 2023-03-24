@@ -45,6 +45,7 @@ import {
   ModalCloseButton,
 } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
+import { ArrowForwardIcon } from "@chakra-ui/icons";
 
 export default function SprintCards() {
   return (
@@ -85,7 +86,7 @@ export default function SprintCards() {
                 </Box>
                 {/* <Tags skills={skills} display={['none', 'none', 'flex', 'flex']} /> */}
                 <Link to="/">
-                  <Button colorScheme="teal" variant="outline">
+                  <Button colorScheme="teal" variant="outline" rightIcon={<ArrowForwardIcon />}>
                     Visit sprint issue
                   </Button>
                 </Link>
