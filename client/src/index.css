@@ -8,3 +8,12 @@ body{
   width: 100%;
   min-height: 100vh;
 }
+
+/* .css-mdtqof:hover{
+  background-color: teal;
+  color: white;
+} */
+.active .css-mdtqof{
+  background-color: #008080;
+  color: white;
+}
