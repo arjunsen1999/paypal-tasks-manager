@@ -9,19 +9,17 @@ import {
   VStack,
   Icon,
   useColorModeValue,
-  Link,
   Drawer,
   DrawerContent,
   Text,
   useDisclosure,
-  BoxProps,
-  FlexProps,
   Menu,
   MenuButton,
   MenuDivider,
   MenuItem,
   MenuList,
   Image,
+  Link,
 } from "@chakra-ui/react";
 import {
   FiHome,
@@ -35,17 +33,17 @@ import { FaTasks } from "react-icons/fa";
 import { NavLink } from "react-router-dom";
 
 const LinkItems = [
-  { name: "Home", icon: FiHome, route : "/" },
-  { name: "Sprint", icon: GiSprint, route : "/sprint" },
-  { name: "My Tasks", icon: FaTasks, route : "/tasks" },
-  { name: "Loading", icon: FiHome, route : "/loading" },
+  { name: "Home", icon: FiHome, route: "/" },
+  { name: "Sprint", icon: GiSprint, route: "/sprint" },
+  { name: "My Tasks", icon: FaTasks, route: "/tasks" },
+  { name: "Loading", icon: FiHome, route: "/loading" },
 ];
 
 export default function SidebarWithHeader({ children }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
     // position={"sticky"} top="0px"
-    <Box bg={useColorModeValue("gray.100", "gray.900")} >
+    <Box bg={useColorModeValue("gray.100", "gray.900")}>
       <SidebarContent
         onClose={() => onClose}
         display={{ base: "none", md: "block" }}
@@ -88,7 +86,7 @@ const SidebarContent = ({ onClose, ...rest }) => {
         {/* <Text fontSize="2xl" fontFamily="monospace" fontWeight="bold">
           Logo
         </Text> */}
-        <Image w="50px" src="./tasks.png"/>
+        <Image w="50px" src="./tasks.png" />
         <CloseButton display={{ base: "flex", md: "none" }} onClick={onClose} />
       </Flex>
       {LinkItems.map((link) => (
@@ -168,7 +166,11 @@ const MobileNav = ({ onOpen, ...rest }) => {
       >
         Logo
       </Text> */}
-       <Image w="50px" src="./tasks.png"  display={{ base: "flex", md: "none" }}/>
+      <Image
+        w="50px"
+        src="./tasks.png"
+        display={{ base: "flex", md: "none" }}
+      />
 
       <HStack spacing={{ base: "0", md: "6" }}>
         {/* <IconButton
@@ -192,7 +194,7 @@ const MobileNav = ({ onOpen, ...rest }) => {
                   spacing="1px"
                   ml="2"
                 >
-                  <Text fontSize="lm">Arjun Sen</Text>
+                  <Text fontSize="lm">User</Text>
                   {/* <Text fontSize="sm" color="gray.600">
                     Seller
                   </Text> */}
@@ -206,11 +208,19 @@ const MobileNav = ({ onOpen, ...rest }) => {
               bg={useColorModeValue("white", "gray.900")}
               borderColor={useColorModeValue("gray.200", "gray.700")}
             >
-              <MenuItem>Profile</MenuItem>
-              <MenuItem>Settings</MenuItem>
-              <MenuItem>Billing</MenuItem>
+              <NavLink to="/">
+                <MenuItem>Profile</MenuItem>
+              </NavLink>
+              <NavLink to="/">
+                <MenuItem>Settings</MenuItem>
+              </NavLink>
+              <NavLink to="/register">
+                <MenuItem>Register</MenuItem>
+              </NavLink>
               <MenuDivider />
-              <MenuItem>Sign out</MenuItem>
+              <NavLink to="/login">
+                <MenuItem>Login</MenuItem>
+              </NavLink>
             </MenuList>
           </Menu>
         </Flex>
