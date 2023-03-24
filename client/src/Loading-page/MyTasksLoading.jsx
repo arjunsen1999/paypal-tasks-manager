@@ -1,6 +1,6 @@
 import { Box } from "@chakra-ui/react";
 import React from "react";
-import { Skeleton, SkeletonCircle, SkeletonText } from "@chakra-ui/react";
+import { Skeleton } from "@chakra-ui/react";
 
 export default function MyTasksLoading() {
   return (
