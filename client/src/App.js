@@ -1,6 +1,7 @@
 import { Box } from "@chakra-ui/react";
 import { Route, Routes } from "react-router-dom";
 import Navbar from "./Components/Navbar/Navbar";
+import MyTasksLoading from "./Loading-page/MyTasksLoading";
 import SprintLoading from "./Loading-page/SprintLoading";
 import Home from "./Pages/Home";
 import Issue from "./Pages/Issue";
@@ -18,7 +19,7 @@ function App() {
           <Route path="/sprint" element={<Sprint />} />
           <Route path="/sprint/:id" element={<Issue />} />
           <Route path="/tasks" element={<MyTasks />} />
-          <Route path="/loading" element={<SprintLoading />} />
+          <Route path="/loading" element={<MyTasksLoading />} />
         </Routes>
       </Box>
     </Box>

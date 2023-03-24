@@ -64,10 +64,17 @@ export default function TasksCard() {
               <Flex>
                 <Stack spacing={2} pl={3} align="left">
                   <Box alignItems="center">
-                    <Heading align="left" fontSize="xl" mr={"20px"} mb="20px">
+                    <Heading align="left" fontSize="xl" mr={"20px"}>
                       Name
                     </Heading>
-                    <Heading fontSize={"18px"}>Title</Heading>
+                  </Box>
+                  <Box>
+                  <Heading fontSize={"18px"}>Title</Heading>
+                  </Box>
+                  <Box>
+                  <Badge variant='outline' colorScheme='green'>
+    Default
+  </Badge>
                   </Box>
                   <Box mb="10px">
                     <Text textAlign={"left"}>
@@ -90,7 +97,18 @@ export default function TasksCard() {
                   {/* <Tags skills={skills} display={['none', 'none', 'flex', 'flex']} /> */}
                 </Stack>
               </Flex>
-              <Stack></Stack>
+              <Stack>
+
+              <Menu>
+                <MenuButton as={Button} h="20px">
+                  <BsThreeDots />
+                </MenuButton>
+                <MenuList>
+                <MenuItem >Progress</MenuItem>
+                <MenuItem >Done</MenuItem>
+                </MenuList>
+              </Menu>
+              </Stack>
             </Flex>
 
             {/* <Tags skills={skills} display={['flex', 'flex', 'none', 'none']} /> */}
