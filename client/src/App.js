@@ -1,7 +1,9 @@
 import { Box } from "@chakra-ui/react";
 import { Route, Routes } from "react-router-dom";
 import Navbar from "./Components/Navbar/Navbar";
+import SprintLoading from "./Loading-page/SprintLoading";
 import Home from "./Pages/Home";
+import Issue from "./Pages/Issue";
 import MyTasks from "./Pages/MyTasks";
 import Sprint from "./Pages/Sprint";
 
@@ -12,9 +14,11 @@ function App() {
       <Box></Box>
       <Box mr={{base : "0px", md :"25px"}}>
         <Routes>
-          <Route path="/" element={<Home />}></Route>
-          <Route path="/sprint" element={<Sprint />}></Route>
-          <Route path="/tasks" element={<MyTasks />}></Route>
+          <Route path="/" element={<Home />} />
+          <Route path="/sprint" element={<Sprint />} />
+          <Route path="/sprint/:id" element={<Issue />} />
+          <Route path="/tasks" element={<MyTasks />} />
+          <Route path="/loading" element={<SprintLoading />} />
         </Routes>
       </Box>
     </Box>
