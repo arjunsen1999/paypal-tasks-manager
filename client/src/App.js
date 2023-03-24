@@ -2,7 +2,7 @@ import { Box } from "@chakra-ui/react";
 import { Route, Routes } from "react-router-dom";
 import Navbar from "./Components/Navbar/Navbar";
 import MyTasksLoading from "./Loading-page/MyTasksLoading";
-import SprintLoading from "./Loading-page/SprintLoading";
+import Error404main from "./Pages/Error404main";
 import Home from "./Pages/Home";
 import Issue from "./Pages/Issue";
 import MyTasks from "./Pages/MyTasks";
@@ -20,6 +20,7 @@ function App() {
           <Route path="/sprint/:id" element={<Issue />} />
           <Route path="/tasks" element={<MyTasks />} />
           <Route path="/loading" element={<MyTasksLoading />} />
+          <Route path="*" element={<Error404main />} />
         </Routes>
       </Box>
     </Box>
