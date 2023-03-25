@@ -19,7 +19,7 @@ import {
 } from "@chakra-ui/react";
 import { SmallCloseIcon, ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import styles from "../styles/RegisterButton.module.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Select } from "@chakra-ui/react";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
@@ -32,6 +32,7 @@ const Register = () => {
   );
   let dispatch = useDispatch();
   const toast = useToast();
+  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [profileBtnLoading, setProfileBtnLoading] = useState(false);
   const [profile, setProfile] = useState("");
@@ -99,6 +100,7 @@ const Register = () => {
         status: "success",
         description: message,
       });
+      navigate("/login")
     }
 
     dispatch({ type: user_signup_reset });

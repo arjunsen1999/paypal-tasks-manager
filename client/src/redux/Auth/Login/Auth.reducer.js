@@ -14,6 +14,7 @@ import {
     isError: false,
     isSuccess: false,
     message: "",
+    isLogoutSuccess : false
   };
   export const userLoginReducer = (state = initaialState, { type, payload }) => {
     switch (type) {
@@ -45,6 +46,7 @@ import {
           isError: false,
           isSuccess: false,
           message: "",
+          isLogoutSuccess : false
         };
 
         case user_logout:
@@ -52,8 +54,7 @@ import {
             return {
                 ...state,
                 user : false,
-                isError : false,
-                isSuccess : true,
+                isLogoutSuccess : true,
                 message : "Successfully Logout"
             }
   

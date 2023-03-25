@@ -17,13 +17,14 @@ import {
 } from "@chakra-ui/react";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import styles from "../styles/RegisterButton.module.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import { userLogin } from "../redux/Auth/Login/Auth.action";
 import { user_login_reset } from "../redux/Auth/Login/Auth.actionType";
 
 const Login = () => {
   const toast = useToast();
+  const navigate = useNavigate();
   const { User_isLoading, isError, isSuccess, message } = useSelector(
     (state) => state.userLogin
   );
@@ -70,6 +71,7 @@ const Login = () => {
         status: "success",
         description: message,
       });
+      navigate("/")
     }
 
     dispatch({ type: user_login_reset });

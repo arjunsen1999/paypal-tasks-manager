@@ -33,13 +33,16 @@ import { GiSprint } from "react-icons/gi";
 import { FaTasks } from "react-icons/fa";
 import { NavLink } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { user_login_reset, user_logout } from "../../redux/Auth/Login/Auth.actionType";
+import {
+  user_login_reset,
+  user_logout,
+} from "../../redux/Auth/Login/Auth.actionType";
 import { useEffect } from "react";
 
 const LinkItems = [
   { name: "Home", icon: FiHome, route: "/" },
   { name: "Sprint", icon: GiSprint, route: "/sprint" },
-  { name: "My Tasks", icon: FaTasks, route: "/tasks" }
+  { name: "My Tasks", icon: FaTasks, route: "/tasks" },
 ];
 
 export default function SidebarWithHeader({ children }) {
@@ -74,9 +77,7 @@ export default function SidebarWithHeader({ children }) {
 }
 
 const SidebarContent = ({ onClose, ...rest }) => {
-  const { user, isError, isSuccess } = useSelector(
-    (state) => state.userLogin
-  );
+  const { user } = useSelector((state) => state.userLogin);
   return (
     <Box
       transition="3s ease"
@@ -95,14 +96,23 @@ const SidebarContent = ({ onClose, ...rest }) => {
         <Image w="50px" src="./tasks.png" />
         <CloseButton display={{ base: "flex", md: "none" }} onClick={onClose} />
       </Flex>
-      {LinkItems.map((link) => (
-        <NavLink to={link.route}>
-          {" "}
-          <NavItem key={link.name} icon={link.icon}>
-            {link.name}
-          </NavItem>
+      {/* {LinkItems.map((link) => ( */}
+      {/* icon={link.icon} */}
+      <NavLink to={"/"}>
+        {" "}
+        <NavItem icon={FiHome}>Home</NavItem>
+      </NavLink>
+
+      {user.role == "manager" ? (
+        <NavLink to={"/sprint"}>
+          <NavItem icon={GiSprint}>Sprint</NavItem>
         </NavLink>
-      ))}
+      ) : null}
+
+      <NavLink to={"/tasks"}>
+        <NavItem icon={FaTasks}>My Tasks</NavItem>
+      </NavLink>
+      {/* ))} */}
     </Box>
   );
 };
@@ -145,35 +155,24 @@ const NavItem = ({ icon, children, ...rest }) => {
 
 const MobileNav = ({ onOpen, ...rest }) => {
   const toast = useToast();
-  const { User_isLoading, isError, isSuccess, message, user } = useSelector(
+  const { user, message, isLogoutSuccess } = useSelector(
     (state) => state.userLogin
   );
   let dispatch = useDispatch();
-  useEffect(() =>{
- // For Error
- if (isError) {
-  toast({
-    title: `Error`,
-    position: "top",
-    isClosable: true,
-    status: "error",
-    description: message,
-  });
-}
+  useEffect(() => {
+    // For Success
+    if (isLogoutSuccess) {
+      toast({
+        title: `Success`,
+        position: "top",
+        isClosable: true,
+        status: "success",
+        description: message,
+      });
+    }
 
-// For Success
-if (isSuccess) {
-  toast({
-    title: `Success`,
-    position: "top",
-    isClosable: true,
-    status: "success",
-    description: message,
-  });
-}
-
-dispatch({ type: user_login_reset });
-  }, [isError, isSuccess])
+    dispatch({ type: user_login_reset });
+  }, [isLogoutSuccess]);
   return (
     <Flex
       ml={{ base: 0, md: 60 }}
@@ -261,7 +260,9 @@ dispatch({ type: user_login_reset });
 
               <MenuDivider />
               {user ? (
-                <MenuItem onClick={() => dispatch({type : user_logout})}>Logout</MenuItem>
+                <MenuItem onClick={() => dispatch({ type: user_logout })}>
+                  Logout
+                </MenuItem>
               ) : (
                 <NavLink to="/login">
                   <MenuItem>Login</MenuItem>
