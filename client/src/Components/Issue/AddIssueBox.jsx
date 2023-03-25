@@ -78,6 +78,117 @@ function DrawerEx({ title }) {
                 <option value="option3">Option 3</option>
               </Select>
             </FormControl>
+            {/* ////////////////////// */}
+            <Box
+              width={"100%"}
+              paddingBlock={5}
+              paddingInline={3}
+              borderRadius={10}
+              display="flex"
+              flexDirection={"column"}
+              gap={3}
+              boxShadow={
+                "rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px"
+              }
+            >
+              <Box
+                width={"100%"}
+                display={"flex"}
+                gap={"30px"}
+                alignItems={"center"}
+                backgroundColor={"#edf2f7"}
+                borderRadius={10}
+                padding={"10px"}
+              >
+                <Box>
+                  <Avatar
+                    size="md"
+                    name="Jerry"
+                    src="https://upload.wikimedia.org/wikipedia/en/2/2f/Jerry_Mouse.png"
+                  />
+                </Box>
+
+                <Box>
+                  <Text fontSize={18} fontWeight={600}>
+                    Jerry
+                  </Text>
+                </Box>
+              </Box>
+
+              <Box
+                width={"100%"}
+                display={"flex"}
+                gap={"30px"}
+                alignItems={"center"}
+                backgroundColor={"#edf2f7"}
+                borderRadius={10}
+                padding={"10px"}
+              >
+                <Box>
+                  <Avatar
+                    size="md"
+                    name="Jerry"
+                    src="https://upload.wikimedia.org/wikipedia/en/2/2f/Jerry_Mouse.png"
+                  />
+                </Box>
+
+                <Box>
+                  <Text fontSize={18} fontWeight={600}>
+                    Jerry
+                  </Text>
+                </Box>
+              </Box>
+
+              <Box
+                width={"100%"}
+                display={"flex"}
+                gap={"30px"}
+                alignItems={"center"}
+                backgroundColor={"#edf2f7"}
+                borderRadius={10}
+                padding={"10px"}
+              >
+                <Box>
+                  <Avatar
+                    size="md"
+                    name="Jerry"
+                    src="https://upload.wikimedia.org/wikipedia/en/2/2f/Jerry_Mouse.png"
+                  />
+                </Box>
+
+                <Box>
+                  <Text fontSize={18} fontWeight={600}>
+                    Jerry
+                  </Text>
+                </Box>
+              </Box>
+
+              <Box
+                width={"100%"}
+                display={"flex"}
+                gap={"30px"}
+                alignItems={"center"}
+                backgroundColor={"#edf2f7"}
+                borderRadius={10}
+                padding={"10px"}
+                cursor={"pointer"}
+              >
+                <Box>
+                  <Avatar
+                    size="md"
+                    name="Jerry"
+                    src="https://upload.wikimedia.org/wikipedia/en/2/2f/Jerry_Mouse.png"
+                  />
+                </Box>
+
+                <Box>
+                  <Text fontSize={18} fontWeight={600}>
+                    Jerry
+                  </Text>
+                </Box>
+              </Box>
+            </Box>
+            {/* /////////////////////////// */}
           </DrawerBody>
 
           <DrawerFooter borderTopWidth={"1px"}>
