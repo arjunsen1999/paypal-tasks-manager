@@ -20,6 +20,7 @@ import {
   MenuList,
   Image,
   Link,
+  useToast,
 } from "@chakra-ui/react";
 import {
   FiHome,
@@ -31,12 +32,14 @@ import {
 import { GiSprint } from "react-icons/gi";
 import { FaTasks } from "react-icons/fa";
 import { NavLink } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { user_login_reset, user_logout } from "../../redux/Auth/Login/Auth.actionType";
+import { useEffect } from "react";
 
 const LinkItems = [
   { name: "Home", icon: FiHome, route: "/" },
   { name: "Sprint", icon: GiSprint, route: "/sprint" },
-  { name: "My Tasks", icon: FaTasks, route: "/tasks" },
-  { name: "Loading", icon: FiHome, route: "/loading" },
+  { name: "My Tasks", icon: FaTasks, route: "/tasks" }
 ];
 
 export default function SidebarWithHeader({ children }) {
@@ -71,6 +74,9 @@ export default function SidebarWithHeader({ children }) {
 }
 
 const SidebarContent = ({ onClose, ...rest }) => {
+  const { user, isError, isSuccess } = useSelector(
+    (state) => state.userLogin
+  );
   return (
     <Box
       transition="3s ease"
@@ -138,6 +144,36 @@ const NavItem = ({ icon, children, ...rest }) => {
 };
 
 const MobileNav = ({ onOpen, ...rest }) => {
+  const toast = useToast();
+  const { User_isLoading, isError, isSuccess, message, user } = useSelector(
+    (state) => state.userLogin
+  );
+  let dispatch = useDispatch();
+  useEffect(() =>{
+ // For Error
+ if (isError) {
+  toast({
+    title: `Error`,
+    position: "top",
+    isClosable: true,
+    status: "error",
+    description: message,
+  });
+}
+
+// For Success
+if (isSuccess) {
+  toast({
+    title: `Success`,
+    position: "top",
+    isClosable: true,
+    status: "success",
+    description: message,
+  });
+}
+
+dispatch({ type: user_login_reset });
+  }, [isError, isSuccess])
   return (
     <Flex
       ml={{ base: 0, md: 60 }}
@@ -187,14 +223,17 @@ const MobileNav = ({ onOpen, ...rest }) => {
               _focus={{ boxShadow: "none" }}
             >
               <HStack>
-                <Avatar size={"sm"} src={"https://bit.ly/broken-link"} />
+                <Avatar
+                  size={"sm"}
+                  src={user ? user.pic : "https://bit.ly/broken-link"}
+                />
                 <VStack
                   display={{ base: "none", md: "flex" }}
                   alignItems="flex-start"
                   spacing="1px"
                   ml="2"
                 >
-                  <Text fontSize="lm">User</Text>
+                  <Text fontSize="lm">{user ? user.username : "User"}</Text>
                   {/* <Text fontSize="sm" color="gray.600">
                     Seller
                   </Text> */}
@@ -214,13 +253,20 @@ const MobileNav = ({ onOpen, ...rest }) => {
               <NavLink to="/">
                 <MenuItem>Settings</MenuItem>
               </NavLink>
-              <NavLink to="/register">
-                <MenuItem>Register</MenuItem>
-              </NavLink>
+              {user ? null : (
+                <NavLink to="/register">
+                  <MenuItem>Register</MenuItem>
+                </NavLink>
+              )}
+
               <MenuDivider />
-              <NavLink to="/login">
-                <MenuItem>Login</MenuItem>
-              </NavLink>
+              {user ? (
+                <MenuItem onClick={() => dispatch({type : user_logout})}>Logout</MenuItem>
+              ) : (
+                <NavLink to="/login">
+                  <MenuItem>Login</MenuItem>
+                </NavLink>
+              )}
             </MenuList>
           </Menu>
         </Flex>

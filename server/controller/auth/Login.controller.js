@@ -30,7 +30,7 @@ const loginController = asyncHandler(async (req, res) => {
     // create jwt token
     const token = jwt.sign({ _id: isUser._id }, process.env.SECRET_KEY);
 
-    return res.send({token, msg : "Successfully Login", user : {username : isUser.username, pic : isUser.profile_picture, role : isUser.role}});
+    return res.send({ msg : "Successfully Login", user : {username : isUser.username, pic : isUser.profile_picture, role : isUser.role, token}});
   } catch (error) {
     return res.status(500).send({ error: "Somthing Went Wrong!" });
   }
