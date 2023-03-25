@@ -19,11 +19,30 @@ import {
 } from "@chakra-ui/react";
 import SprintCards from "../Components/Sprint/SprintCards";
 import SprintLoading from "../Loading-page/SprintLoading";
+import axios from "axios";
+import { useSelector } from "react-redux";
 
 export default function Sprint() {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const { user } = useSelector((state) => state.userLogin);
+  let [data, setData] = useState([]);
+
   let [sprintIsLoading, setSprintIsLoading] = useState(true);
+  const getSprintData = async () => {
+    try {
+      let res = await fetch(`http://localhost:8080/sprint/get`, {
+        method: "GET",
+        headers: {
+          token: user.token,
+        },
+      });
+      let resData = await res.json();
+      console.log(resData);
+      setData(resData);
+    } catch (error) {}
+  };
   useEffect(() => {
+    getSprintData();
     setSprintIsLoading(false);
   }, []);
   return (
@@ -101,9 +120,9 @@ export default function Sprint() {
             </Modal>
           </Box>
           <Box>
-            <SprintCards />
-            <SprintCards />
-            <SprintCards />
+            {data.map((ele) => {
+              return <SprintCards {...ele} />;
+            })}
           </Box>
         </Box>
       )}

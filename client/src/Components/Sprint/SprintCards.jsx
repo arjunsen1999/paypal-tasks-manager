@@ -47,7 +47,7 @@ import {
 import { Link } from "react-router-dom";
 import { ArrowForwardIcon } from "@chakra-ui/icons";
 
-export default function SprintCards() {
+export default function SprintCards({end_date, managerId, start_date, name, number_of_issue, _id, status}) {
   return (
     <>
       {/* <Container maxW="4xl" p={{ base: 5, md: 12 }}> */}
@@ -66,26 +66,26 @@ export default function SprintCards() {
               <Stack spacing={2} pl={3} align="left">
                 <Box display={"flex"} alignItems="center">
                   <Heading align="left" fontSize="xl" mr={"20px"}>
-                    Name
+                    {name}
                   </Heading>
                   <Text fontSize={"17px"} mr={"20px"}>
-                    0 issue
+                    {number_of_issue} issue
                   </Text>
                   <Badge variant="outline" colorScheme="green">
-                    Active
+                    {status}
                   </Badge>
                 </Box>
                 <Box mb="10px">
-                  <Text>24/May/22 3:55 PM - 28/May/22 3:55 PM</Text>
+                  <Text>{start_date} - {end_date}</Text>
                 </Box>
                 <Box>
                   <Text>
                     Created by:{" "}
-                    <span style={{ fontWeight: "bold" }}>Arjun Sen</span>
+                    <span style={{ fontWeight: "bold" }}>{managerId.username}</span>
                   </Text>
                 </Box>
                 {/* <Tags skills={skills} display={['none', 'none', 'flex', 'flex']} /> */}
-                <Link to="/">
+                <Link to={`/sprint/${_id}`}>
                   <Button colorScheme="teal" variant="outline" rightIcon={<ArrowForwardIcon />}>
                     Visit sprint issue
                   </Button>
@@ -98,8 +98,8 @@ export default function SprintCards() {
                   <BsThreeDots />
                 </MenuButton>
                 <MenuList>
-                  <EditModel />
-                  <AlertDialogExample />
+                  <EditModel id={_id}/>
+                  <AlertDialogExample id={_id}/>
                 </MenuList>
               </Menu>
             </Stack>
@@ -113,7 +113,7 @@ export default function SprintCards() {
   );
 }
 
-function AlertDialogExample() {
+function AlertDialogExample(id) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const cancelRef = React.useRef();
 
@@ -151,7 +151,7 @@ function AlertDialogExample() {
   );
 }
 
-function EditModel() {
+function EditModel(id) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
     <>
