@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Flex,
   Box,
@@ -13,13 +13,68 @@ import {
   useColorModeValue,
   InputRightElement,
   InputGroup,
+  useToast,
 } from "@chakra-ui/react";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import styles from "../styles/RegisterButton.module.css";
 import { Link } from "react-router-dom";
+import {useDispatch, useSelector} from "react-redux";
+import { userLogin } from "../redux/Auth/Login/Auth.action";
+import { user_login_reset } from "../redux/Auth/Login/Auth.actionType";
 
 const Login = () => {
+  const toast = useToast();
+  const { User_isLoading, isError, isSuccess, message } = useSelector(
+    (state) => state.userLogin
+  );
+  let dispatch = useDispatch();
   const [showPassword, setShowPassword] = useState(false);
+  const [FormInput, setFormInput] = useState({
+    email: "",
+    password: "",
+  });
+
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setFormInput((prev) => {
+      return {
+        ...prev,
+        [name]: value,
+      };
+    });
+  };
+
+  const handleSubmit = (event) =>{
+    event.preventDefault();
+    dispatch(userLogin(FormInput))
+  }
+
+  useEffect(() => {
+    // For Error
+    if (isError) {
+      toast({
+        title: `Error`,
+        position: "top",
+        isClosable: true,
+        status: "error",
+        description: message,
+      });
+    }
+
+    // For Success
+    if (isSuccess) {
+      toast({
+        title: `Success`,
+        position: "top",
+        isClosable: true,
+        status: "success",
+        description: message,
+      });
+    }
+
+    dispatch({ type: user_login_reset });
+  }, [isError, isSuccess]);
+
   return (
     <>
       <Flex
@@ -41,12 +96,12 @@ const Login = () => {
             <Stack spacing={4}>
               <FormControl id="email">
                 <FormLabel>Email address</FormLabel>
-                <Input type="email" />
+                <Input type="email" name="email" onChange={handleChange} />
               </FormControl>
               <FormControl id="password" isRequired>
                 <FormLabel>Password</FormLabel>
                 <InputGroup>
-                  <Input type={showPassword ? "text" : "password"} />
+                  <Input type={showPassword ? "text" : "password"} name="password" onChange={handleChange} />
                   <InputRightElement h={"full"}>
                     <Button
                       variant={"ghost"}
@@ -69,7 +124,18 @@ const Login = () => {
                   <Link color={"blue.400"}>Forgot password?</Link>
                 </Stack>
                 <Stack width={"100%"}>
-                  <Button className={styles.registerButton}>Login</Button>
+                  {
+                    User_isLoading?     <Button
+                    isLoading
+                    loadingText="Login"
+                    colorScheme="teal"
+                    variant="outline"
+                    w="100%"
+                  >
+                    Login
+                  </Button> : <Button className={styles.registerButton} onClick={handleSubmit}>Login</Button>
+                  }
+                  
                 </Stack>
               </Stack>
             </Stack>
