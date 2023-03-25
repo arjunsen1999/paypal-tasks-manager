@@ -1,10 +1,12 @@
 import {
+  Avatar,
   Box,
   Button,
   FormControl,
   FormLabel,
   Input,
   Select,
+  Text,
   Textarea,
   useDisclosure,
 } from "@chakra-ui/react";
