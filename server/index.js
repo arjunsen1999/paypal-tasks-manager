@@ -7,12 +7,14 @@ const {connection} = require('./config/db');
 
 const {authRouter} = require('./routes/auth/auth.route');
 const {sprintRouter} = require("./routes/sprint/sprint.route");
+const {issueRouter} = require("./routes/issue/issue.route");
 
 app.use(cors());
 app.use(express.json());
 
 app.use("/auth", authRouter);
 app.use("/sprint", sprintRouter);
+app.use("/issue", issueRouter);
 
 
 app.listen(PORT, () =>{
