@@ -169,7 +169,7 @@ function DrawerEx({ title, sprintId }) {
               </AutoComplete>
             </FormControl>
             <Checkbox size="md" colorScheme="teal" id="important">
-              Inportant
+              Important
             </Checkbox>
             {/* </Flex> */}
             {/* /////////////////// */}
