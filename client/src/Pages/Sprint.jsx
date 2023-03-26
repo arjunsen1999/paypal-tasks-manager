@@ -6,6 +6,7 @@ import {
   Input,
   Text,
   useDisclosure,
+  useToast,
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import {
@@ -20,31 +21,81 @@ import {
 import SprintCards from "../Components/Sprint/SprintCards";
 import SprintLoading from "../Loading-page/SprintLoading";
 import axios from "axios";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { addSprint } from "../redux/Sprint/Sprint.action";
+import { sprint_reset } from "../redux/Sprint/Sprint.actionType";
 
 export default function Sprint() {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const toast = useToast();
+  const dispatch = useDispatch();
   const { user } = useSelector((state) => state.userLogin);
+  const { isLoading_button, isSuccess, isError, message } = useSelector(
+    (state) => state.sprint
+  );
   let [data, setData] = useState([]);
+  const [formInput, setFormInput] = useState({
+    name: "",
+    goal: "",
+    start_date: "",
+    end_date: "",
+  });
+
+  const handleChange = (event) => {
+    let { name, value } = event.target;
+    setFormInput((prev) => {
+      return {
+        ...prev,
+        [name]: value,
+      };
+    });
+  };
+
+  const handleSubmit = () => {
+    dispatch(addSprint(user.token, formInput));
+  };
 
   let [sprintIsLoading, setSprintIsLoading] = useState(true);
   const getSprintData = async () => {
     try {
-      let res = await fetch(`http://localhost:8080/sprint/get`, {
+      let res = await fetch(`${process.env.REACT_APP_BACKEND_URL}/sprint/get`, {
         method: "GET",
         headers: {
+          "Content-Type": "application/json",
           token: user.token,
         },
       });
       let resData = await res.json();
-      console.log(resData);
+      setSprintIsLoading(false);
       setData(resData);
-    } catch (error) {}
+    } catch (error) {
+      setSprintIsLoading(false);
+    }
   };
   useEffect(() => {
+    // For Error
+    if (isError) {
+      toast({
+        title: `Error`,
+        position: "top",
+        isClosable: true,
+        status: "error",
+        description: message,
+      });
+    }
+    // For Success
+    if (isSuccess) {
+      toast({
+        title: `Success`,
+        position: "top",
+        isClosable: true,
+        status: "success",
+        description: message,
+      });
+    }
+    dispatch({ type: sprint_reset });
     getSprintData();
-    setSprintIsLoading(false);
-  }, []);
+  }, [isError, isSuccess]);
   return (
     <>
       {sprintIsLoading ? (
@@ -80,11 +131,21 @@ export default function Sprint() {
                   <Box mb="20px">
                     <FormControl isRequired mb="10px">
                       <FormLabel>Sprint Name</FormLabel>
-                      <Input variant="filled" placeholder="Enter sprint name" />
+                      <Input
+                        variant="filled"
+                        name="name"
+                        onChange={handleChange}
+                        placeholder="Enter sprint name"
+                      />
                     </FormControl>
                     <FormControl mb="10px">
                       <FormLabel>Goal</FormLabel>
-                      <Input variant="filled" placeholder="Enter goal" />
+                      <Input
+                        variant="filled"
+                        onChange={handleChange}
+                        name="goal"
+                        placeholder="Enter goal"
+                      />
                     </FormControl>
                     <FormControl mb="10px">
                       <FormLabel>Start Date</FormLabel>
@@ -93,6 +154,8 @@ export default function Sprint() {
                         size="md"
                         type="datetime-local"
                         variant="filled"
+                        name="start_date"
+                        onChange={handleChange}
                       />
                     </FormControl>
                     <FormControl mb="10px">
@@ -102,6 +165,8 @@ export default function Sprint() {
                         size="md"
                         type="datetime-local"
                         variant="filled"
+                        name="end_date"
+                        onChange={handleChange}
                       />
                     </FormControl>
                   </Box>
@@ -109,10 +174,26 @@ export default function Sprint() {
                 </ModalBody>
 
                 <ModalFooter borderTopWidth={"1px"}>
-                  <Button colorScheme="teal" mr={3} onClick={onClose}>
-                    Create
-                  </Button>
-                  <Button colorScheme="teal" variant="outline">
+                  {isLoading_button ? (
+                    <Button
+                      isLoading
+                      loadingText="Create"
+                      colorScheme="teal"
+                      mr={3}
+                    >
+                      Create
+                    </Button>
+                  ) : (
+                    <Button colorScheme="teal" mr={3} onClick={handleSubmit}>
+                      Create
+                    </Button>
+                  )}
+
+                  <Button
+                    colorScheme="teal"
+                    variant="outline"
+                    onClick={onClose}
+                  >
                     Cancel
                   </Button>
                 </ModalFooter>

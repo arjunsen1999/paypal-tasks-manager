@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Stack,
@@ -46,8 +46,20 @@ import {
 } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 import { ArrowForwardIcon } from "@chakra-ui/icons";
+import { useDispatch, useSelector } from "react-redux";
+import { deleteSprint } from "../../redux/Sprint/Sprint.action";
+import { editSprint } from "../../redux/Sprint/Sprint.action";
 
-export default function SprintCards({end_date, managerId, start_date, name, number_of_issue, _id, status}) {
+export default function SprintCards({
+  end_date,
+  managerId,
+  start_date,
+  name,
+  number_of_issue,
+  _id,
+  status,
+  goal
+}) {
   return (
     <>
       {/* <Container maxW="4xl" p={{ base: 5, md: 12 }}> */}
@@ -76,17 +88,25 @@ export default function SprintCards({end_date, managerId, start_date, name, numb
                   </Badge>
                 </Box>
                 <Box mb="10px">
-                  <Text>{start_date} - {end_date}</Text>
+                  <Text>
+                    {start_date} - {end_date}
+                  </Text>
                 </Box>
                 <Box>
                   <Text>
                     Created by:{" "}
-                    <span style={{ fontWeight: "bold" }}>{managerId.username}</span>
+                    <span style={{ fontWeight: "bold" }}>
+                      {managerId.username}
+                    </span>
                   </Text>
                 </Box>
                 {/* <Tags skills={skills} display={['none', 'none', 'flex', 'flex']} /> */}
                 <Link to={`/sprint/${_id}`}>
-                  <Button colorScheme="teal" variant="outline" rightIcon={<ArrowForwardIcon />}>
+                  <Button
+                    colorScheme="teal"
+                    variant="outline"
+                    rightIcon={<ArrowForwardIcon />}
+                  >
                     Visit sprint issue
                   </Button>
                 </Link>
@@ -98,8 +118,8 @@ export default function SprintCards({end_date, managerId, start_date, name, numb
                   <BsThreeDots />
                 </MenuButton>
                 <MenuList>
-                  <EditModel id={_id}/>
-                  <AlertDialogExample id={_id}/>
+                  <EditModel id={_id} end_date={end_date} start_date={start_date} name={name} goal={goal}/>
+                  <AlertDialogExample id={_id}  />
                 </MenuList>
               </Menu>
             </Stack>
@@ -116,6 +136,24 @@ export default function SprintCards({end_date, managerId, start_date, name, numb
 function AlertDialogExample(id) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const cancelRef = React.useRef();
+  const dispatch = useDispatch();
+  const { user } = useSelector((state) => state.userLogin);
+  const { isLoading_button, isSuccess, isError } = useSelector(
+    (state) => state.sprint
+  );
+
+  const handleDelete = ({ id }) => {
+    dispatch(deleteSprint(user.token, id));
+  };
+
+  useEffect(() => {
+    if (isError) {
+      onClose();
+    }
+    if (isSuccess) {
+      onClose();
+    }
+  }, [isError, isSuccess]);
 
   return (
     <>
@@ -140,9 +178,19 @@ function AlertDialogExample(id) {
               <Button ref={cancelRef} onClick={onClose}>
                 Cancel
               </Button>
-              <Button colorScheme="red" onClick={onClose} ml={3}>
-                Delete
-              </Button>
+              {isLoading_button ? (
+                <Button isLoading loadingText="Delete" colorScheme="red" ml={3}>
+                  Delete
+                </Button>
+              ) : (
+                <Button
+                  colorScheme="red"
+                  onClick={() => handleDelete(id)}
+                  ml={3}
+                >
+                  Delete
+                </Button>
+              )}
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialogOverlay>
@@ -151,8 +199,41 @@ function AlertDialogExample(id) {
   );
 }
 
-function EditModel(id) {
+function EditModel({id, start_date, end_date, name, goal}) {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [formData, setFormData] = useState({
+    start_date,
+    end_date,
+    name,
+    goal
+  });
+  const dispatch = useDispatch();
+  const { user } = useSelector((state) => state.userLogin);
+  const { isLoading_button, isSuccess, isError } = useSelector(
+    (state) => state.sprint
+  );
+  const handleChange = (event) =>{
+    let {name, value} = event.target;
+    setFormData((prev) =>{
+      return {
+        ...prev,
+        [name] : value
+      }
+    })
+  }
+  const handleSubmit = (id, formData) =>{
+    dispatch(editSprint(user.token, id, formData));
+  }
+
+  useEffect(() => {
+    if (isError) {
+      onClose();
+    }
+    if (isSuccess) {
+      onClose();
+    }
+  }, [isError, isSuccess]);
+  
   return (
     <>
       <MenuItem onClick={onOpen}>Edit</MenuItem>
@@ -165,11 +246,11 @@ function EditModel(id) {
             <Box mb="20px">
               <FormControl isRequired mb="10px">
                 <FormLabel>Sprint Name</FormLabel>
-                <Input variant="filled" placeholder="Enter sprint name" />
+                <Input value={formData.name} name="name" onChange={handleChange} variant="filled" placeholder="Enter sprint name" />
               </FormControl>
               <FormControl mb="10px">
                 <FormLabel>Goal</FormLabel>
-                <Input variant="filled" placeholder="Enter goal" />
+                <Input variant="filled" value={formData.goal} name="goal" onChange={handleChange} placeholder="Enter goal" />
               </FormControl>
               <FormControl mb="10px">
                 <FormLabel>Start Date</FormLabel>
@@ -178,6 +259,9 @@ function EditModel(id) {
                   size="md"
                   type="datetime-local"
                   variant="filled"
+                  value={formData.start_date}
+                  name="start_date"
+                  onChange={handleChange}
                 />
               </FormControl>
               <FormControl mb="10px">
@@ -187,6 +271,9 @@ function EditModel(id) {
                   size="md"
                   type="datetime-local"
                   variant="filled"
+                  onChange={handleChange}
+                  name="end_date"
+                  value={formData.end_date}
                 />
               </FormControl>
             </Box>
@@ -194,10 +281,15 @@ function EditModel(id) {
           </ModalBody>
 
           <ModalFooter borderTopWidth={"1px"}>
-            <Button colorScheme="teal" mr={3} onClick={onClose}>
+            {
+              isLoading_button? <Button isLoading loadingText="Edit" colorScheme="teal" mr={3}>
+              Edit
+            </Button> :<Button colorScheme="teal" mr={3} onClick={() => handleSubmit(id, formData)}>
               Edit
             </Button>
-            <Button colorScheme="teal" variant="outline">
+            }
+            
+            <Button colorScheme="teal" variant="outline" onClick={onClose}>
               Cancel
             </Button>
           </ModalFooter>

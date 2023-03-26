@@ -10,7 +10,7 @@ const initialState = {
   isLoading_button: false,
   loader: true,
   isSuccess: false,
-  isError: true,
+  isError: false,
   message: "",
 };
 
@@ -46,8 +46,9 @@ export const sprintReducer = (state = initialState, { type, payload }) => {
         return {
             ...state,
             isSuccess : false,
-            isError: true,
+            isError: false,
             message: "",
+            isLoading_button : false
         }
 
     default:

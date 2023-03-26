@@ -2,6 +2,8 @@ import {
   Avatar,
   Box,
   Button,
+  Checkbox,
+  Flex,
   FormControl,
   FormLabel,
   Input,
@@ -10,7 +12,7 @@ import {
   Textarea,
   useDisclosure,
 } from "@chakra-ui/react";
-import React from "react";
+import React, { useState } from "react";
 import { AddIcon } from "@chakra-ui/icons";
 import {
   Drawer,
@@ -21,22 +23,77 @@ import {
   DrawerContent,
   DrawerCloseButton,
 } from "@chakra-ui/react";
+import {
+  AutoComplete,
+  AutoCompleteInput,
+  AutoCompleteItem,
+  AutoCompleteList,
+  AutoCompleteGroup,
+  AutoCompleteFixedItem,
+} from "@choc-ui/chakra-autocomplete";
 
-export default function AddIssueBox({ title }) {
+export default function AddIssueBox({ title, sprintId }) {
   return (
     <>
       <Box w="100%" minH="50px" p="10px" bg="white" borderWidth="1px" mb="30px">
         <Box>
-          <DrawerEx title={title} />
+          <DrawerEx title={title} sprintId={sprintId} />
         </Box>
       </Box>
     </>
   );
 }
 
-function DrawerEx({ title }) {
+function DrawerEx({ title, sprintId }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const btnRef = React.useRef();
+  const [formData, setFormData] = useState({
+    sprintId,
+    title : "",
+    description : "",
+    type : title,
+  })
+  const [people, setPeople] = useState([])
+
+  const handleChange = (event) =>{
+ let {name, value} = event.target;
+ setFormData((prev) =>{
+  return {
+    ...prev,
+    [name] : value
+  }
+ })
+  }
+
+  const searchUser = async (event) =>{
+    try {
+      let res = await fetch(`http://localhost:8080/auth//get/users?username=${event.target.value}`);
+      let resData = await res.json();
+      if(Array.isArray(resData)){
+        setPeople(resData); 
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  const handleClick = () =>{
+    let assign_to = document.querySelector("#assign_to").value || false;
+    let important = document.querySelector("#important").checked || false;
+    let data = {
+      ...formData,
+      important
+    }
+
+    if(assign_to){
+      data.assign_to = assign_to;
+    }else{
+      alert("Somthing");
+      return;
+    }
+   
+    console.log(data)
+  }
 
   return (
     <>
@@ -66,131 +123,64 @@ function DrawerEx({ title }) {
           <DrawerBody>
             <FormControl isRequired mb="15px">
               <FormLabel>Title</FormLabel>
-              <Input variant="filled" placeholder="Enter title" />
+              <Input variant="filled" name={"title"} onChange={handleChange} placeholder="Enter title" />
             </FormControl>
             <FormControl isRequired mb="15px">
               <FormLabel>Description</FormLabel>
-              <Textarea variant="filled" placeholder="Enter description" />
+              <Textarea variant="filled" name="description" onChange={handleChange} placeholder="Enter description" />
             </FormControl>
+            {/* //////////////////// */}
+
+            {/* <Flex
+              boxSize="full"
+              h="100vh"
+              pos="absolute"
+              bg={"gray.400"}
+              _dark={{
+                bg: "gray.600",
+              }}
+              p={30}
+              justifyContent="center"
+            > */}
             <FormControl isRequired mb="15px">
+              <FormLabel>Assign to</FormLabel>
+              <AutoComplete rollNavigation>
+                <AutoCompleteInput
+                  variant="filled"
+                  placeholder="Search..."
+                  id = "assign_to"
+                  autoFocus
+                  onChange={searchUser}
+                />
+                <AutoCompleteList>
+                  {people.map((person, oid) => (
+                    <AutoCompleteItem
+                      key={`option-${oid}`}
+                      value={person.username}
+                      textTransform="capitalize"
+                      align="center"
+                     
+                    >
+                      <Avatar size="sm" name={person.username?person.username : ""} src={person.profile_picture?person.profile_picture: "" } />
+                      <Text ml="4">{person.username?person.username : "" }</Text>
+                    </AutoCompleteItem>
+                  ))}
+                </AutoCompleteList>
+              </AutoComplete>
+            </FormControl>
+            <Checkbox size="md" colorScheme="teal" id="important">
+              Inportant
+            </Checkbox>
+            {/* </Flex> */}
+            {/* /////////////////// */}
+            {/* <FormControl isRequired mb="15px">
               <FormLabel>Role</FormLabel>
               <Select variant="filled" placeholder="Select option">
                 <option value="option1">Option 1</option>
                 <option value="option2">Option 2</option>
                 <option value="option3">Option 3</option>
               </Select>
-            </FormControl>
-            {/* ////////////////////// */}
-            <Box
-              width={"100%"}
-              paddingBlock={5}
-              paddingInline={3}
-              borderRadius={10}
-              display="flex"
-              flexDirection={"column"}
-              gap={3}
-              boxShadow={
-                "rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px"
-              }
-            >
-              <Box
-                width={"100%"}
-                display={"flex"}
-                gap={"30px"}
-                alignItems={"center"}
-                backgroundColor={"#edf2f7"}
-                borderRadius={10}
-                padding={"10px"}
-              >
-                <Box>
-                  <Avatar
-                    size="md"
-                    name="Jerry"
-                    src="https://upload.wikimedia.org/wikipedia/en/2/2f/Jerry_Mouse.png"
-                  />
-                </Box>
-
-                <Box>
-                  <Text fontSize={18} fontWeight={600}>
-                    Jerry
-                  </Text>
-                </Box>
-              </Box>
-
-              <Box
-                width={"100%"}
-                display={"flex"}
-                gap={"30px"}
-                alignItems={"center"}
-                backgroundColor={"#edf2f7"}
-                borderRadius={10}
-                padding={"10px"}
-              >
-                <Box>
-                  <Avatar
-                    size="md"
-                    name="Jerry"
-                    src="https://upload.wikimedia.org/wikipedia/en/2/2f/Jerry_Mouse.png"
-                  />
-                </Box>
-
-                <Box>
-                  <Text fontSize={18} fontWeight={600}>
-                    Jerry
-                  </Text>
-                </Box>
-              </Box>
-
-              <Box
-                width={"100%"}
-                display={"flex"}
-                gap={"30px"}
-                alignItems={"center"}
-                backgroundColor={"#edf2f7"}
-                borderRadius={10}
-                padding={"10px"}
-              >
-                <Box>
-                  <Avatar
-                    size="md"
-                    name="Jerry"
-                    src="https://upload.wikimedia.org/wikipedia/en/2/2f/Jerry_Mouse.png"
-                  />
-                </Box>
-
-                <Box>
-                  <Text fontSize={18} fontWeight={600}>
-                    Jerry
-                  </Text>
-                </Box>
-              </Box>
-
-              <Box
-                width={"100%"}
-                display={"flex"}
-                gap={"30px"}
-                alignItems={"center"}
-                backgroundColor={"#edf2f7"}
-                borderRadius={10}
-                padding={"10px"}
-                cursor={"pointer"}
-              >
-                <Box>
-                  <Avatar
-                    size="md"
-                    name="Jerry"
-                    src="https://upload.wikimedia.org/wikipedia/en/2/2f/Jerry_Mouse.png"
-                  />
-                </Box>
-
-                <Box>
-                  <Text fontSize={18} fontWeight={600}>
-                    Jerry
-                  </Text>
-                </Box>
-              </Box>
-            </Box>
-            {/* /////////////////////////// */}
+            </FormControl> */}
           </DrawerBody>
 
           <DrawerFooter borderTopWidth={"1px"}>
@@ -202,7 +192,7 @@ function DrawerEx({ title }) {
             >
               Cancel
             </Button>
-            <Button colorScheme="teal">Create</Button>
+            <Button colorScheme="teal" onClick={handleClick}>Create</Button>
           </DrawerFooter>
         </DrawerContent>
       </Drawer>

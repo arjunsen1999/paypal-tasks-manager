@@ -6,6 +6,7 @@ import Home from '../Pages/Home'
 import Issue from '../Pages/Issue'
 import Login from '../Pages/Login'
 import MyTasks from '../Pages/MyTasks'
+import Profile from '../Pages/Profile'
 import Register from '../Pages/Register'
 import Sprint from '../Pages/Sprint'
 
@@ -18,6 +19,7 @@ export default function AllRoutes() {
           <Route path="/sprint/:id" element={<PrivateRoutes><Issue /></PrivateRoutes>} />
           <Route path="/tasks" element={<PrivateRoutes><MyTasks /></PrivateRoutes>} />
           <Route path="/login" element={<Login />} />
+          <Route path="/profile" element = {<Profile />} />
           <Route path="/register" element={<Register />} />
           <Route path="*" element={<Error404main />} />
         </Routes>

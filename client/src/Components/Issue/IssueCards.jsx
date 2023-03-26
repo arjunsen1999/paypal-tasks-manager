@@ -55,7 +55,7 @@ import {
   DrawerCloseButton,
 } from "@chakra-ui/react";
 
-export default function IssueCards() {
+export default function IssueCards({_id, title, status, description, sprintId, assign_to}) {
   return (
     <>
       <Box bg="#EDF2F7" minH="100px" mb="10px">
@@ -78,29 +78,27 @@ export default function IssueCards() {
                     </Heading>
                   </Box> */}
                   <Box>
-                    <Heading fontSize={"18px"}>Title</Heading>
+                    <Heading fontSize={"18px"}>{title}</Heading>
                   </Box>
                   <Box>
                     <Badge variant="outline" colorScheme="green">
-                      Default
+                      {status}
                     </Badge>
                   </Box>
                   <Box mb="10px">
                     <Text textAlign={"left"}>
-                      Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                      Hic maiores sequi consequuntur? Lorem ipsum dolor sit amet
-                      consectetur adipisicing elit. Et error pariatur placeat.
+                      {description}
                     </Text>
                   </Box>
                   <Box mb="10px">
                     <Text textAlign={"left"}>
-                      24/May/22 3:55 PM - 28/May/22 3:55 PM
+                      {sprintId.start_date} - {sprintId.end_date}
                     </Text>
                   </Box>
                   <Box mb="10px">
                     <Stack direction="row">
-                      <Avatar src="https://bit.ly/broken-link" />
-                      <Text>Name</Text>
+                      <Avatar src={assign_to.profile_picture?assign_to.profile_picture : "https://bit.ly/broken-link"} />
+                      <Text>{assign_to.username}</Text>
                     </Stack>
                   </Box>
                   {/* <Tags skills={skills} display={['none', 'none', 'flex', 'flex']} /> */}
