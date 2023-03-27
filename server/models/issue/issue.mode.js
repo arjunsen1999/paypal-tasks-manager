@@ -30,7 +30,7 @@ const issueSchema = mongoose.Schema({
     },
     status : {
         type : String,
-        default : "panding"
+        default : "pending"
     }
 }, {
     versionKey : false,
