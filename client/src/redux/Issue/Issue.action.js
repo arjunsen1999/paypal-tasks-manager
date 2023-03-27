@@ -79,8 +79,8 @@ export const updateIssueStatus = (token, id, status) => async (dispatch) => {
         body : JSON.stringify({status})
     });
     const resData = await res.json();
-    dispatch({type : trigger_loader})
+    dispatch({type : isSuccess, payload : resData.msg});
    } catch (error) {
-     dispatch({type : trigger_loader})
+    dispatch({type : isError, payload : error.error});
    }
 }

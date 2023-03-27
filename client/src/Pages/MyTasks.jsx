@@ -1,14 +1,17 @@
-import { Box } from "@chakra-ui/react";
-import React, { useState } from "react";
-import { useSelector } from "react-redux";
+import { Box, useToast } from "@chakra-ui/react";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import TasksCard from "../Components/MyTasks/TasksCard";
 import TasksHeading from "../Components/MyTasks/TasksHeading";
 import MyTasksLoading from "../Loading-page/MyTasksLoading";
+import { issue_reset } from "../redux/Issue/Issue.actionType";
 
 export default function MyTasks() {
+  const toast = useToast();
   let [myTasksIsLoading, setMyTasksIsLoading] = useState(true);
+  const dispatch = useDispatch();
   const { user } = useSelector((state) => state.userLogin);
-  const { loader } = useSelector((state) => state.issue);
+  const { isSuccess, isError, message } = useSelector((state) => state.issue);
   const [userIssue, setUserIssue] = useState({
     panding: [],
     progress: [],
@@ -16,12 +19,13 @@ export default function MyTasks() {
   });
   const getIssue = async () => {
     try {
-      let res = await fetch(`${process.env.REACT_APP_BACKEND_URL}/issue//user/issue`, {
+      let res = await fetch(`${process.env.REACT_APP_BACKEND_URL}/issue/user/issue`, {
         headers: {
           token: user.token,
         },
       });
       let resData = await res.json();
+      console.log(resData)
       setUserIssue((prev) => {
         return {
           ...prev,
@@ -40,9 +44,12 @@ export default function MyTasks() {
     } catch (error) {
     }
   };
-  useState(() => {
+  useEffect(() => {
+   
+  dispatch({type : issue_reset});
     getIssue();
-  }, [loader]);
+
+  }, [isSuccess, isError]);
   return (
     <>
       {myTasksIsLoading ? (
