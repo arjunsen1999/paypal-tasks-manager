@@ -74,7 +74,7 @@ function DrawerEx({ title, sprintId }) {
 
   const searchUser = async (event) =>{
     try {
-      let res = await fetch(`http://localhost:8080/auth//get/users?username=${event.target.value}`);
+      let res = await fetch(`${process.env.REACT_APP_BACKEND_URL}/auth//get/users?username=${event.target.value}`);
       let resData = await res.json();
       if(Array.isArray(resData)){
         setPeople(resData); 

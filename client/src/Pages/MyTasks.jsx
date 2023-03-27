@@ -16,7 +16,7 @@ export default function MyTasks() {
   });
   const getIssue = async () => {
     try {
-      let res = await fetch(`http://localhost:8080/issue//user/issue`, {
+      let res = await fetch(`${process.env.REACT_APP_BACKEND_URL}/issue//user/issue`, {
         headers: {
           token: user.token,
         },

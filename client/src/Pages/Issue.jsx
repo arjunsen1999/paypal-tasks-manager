@@ -20,7 +20,7 @@ export default function Issue() {
   })
   const getIssueData = async () => {
     try {
-      let res = await fetch(`http://localhost:8080/issue/sprint/issue/${id}`, {
+      let res = await fetch(`${process.env.REACT_APP_BACKEND_URL}/issue/sprint/issue/${id}`, {
         method : 'GET',
         headers : {
           token : user.token

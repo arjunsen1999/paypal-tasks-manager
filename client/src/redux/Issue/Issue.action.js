@@ -48,7 +48,7 @@ export const delete_issue = (token, id) => async (dispatch) =>{
 export const issueEdit = (token, id, formData) => async (dispatch) =>{
     dispatch({type : loading_button, payload : true});
     try {
-        const res = await fetch(`http://localhost:8080/issue/update/${id}`, {
+        const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}/issue/update/${id}`, {
             method : "PATCH",
             headers : {
                 "Content-Type" : "application/json",
@@ -70,7 +70,7 @@ export const issueEdit = (token, id, formData) => async (dispatch) =>{
 
 export const updateIssueStatus = (token, id, status) => async (dispatch) => {
    try {
-    const res = await fetch(`http://localhost:8080/issue/update/status/${id}`, {
+    const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}/issue/update/status/${id}`, {
         method : "PATCH",
         headers : {
             "Content-Type" : "application/json",
