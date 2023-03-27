@@ -1,14 +1,18 @@
-import { Box } from "@chakra-ui/react";
+import { Box, useToast } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import AddIssueBox from "../Components/Issue/AddIssueBox";
 import IssueHeading from "../Components/Issue/IssueHeading";
 import ShowIssueBox from "../Components/Issue/ShowIssueBox";
+import { issue_reset } from "../redux/Issue/Issue.actionType";
 
 export default function Issue() {
   const { id } = useParams("id");
+  const dispatch = useDispatch();
+  const toast = useToast();
   const { user } = useSelector((state) => state.userLogin);
+  const { isLoading_button, isSuccess, isError, message } = useSelector((state) => state.issue);
   const [sprintIssue, setSprintIssue] = useState({
     bug : [],
     feature : [],
@@ -44,8 +48,29 @@ export default function Issue() {
     }
   };
   useEffect(() => {
+      // For Error
+      if (isError) {
+        toast({
+          title: `Error`,
+          position: "top",
+          isClosable: true,
+          status: "error",
+          description: message,
+        });
+      }
+      // For Success
+      if (isSuccess) {
+        toast({
+          title: `Success`,
+          position: "top",
+          isClosable: true,
+          status: "success",
+          description: message,
+        });
+      }
+      dispatch({type : issue_reset})
     getIssueData();
-  }, []);
+  }, [isSuccess, isError]);
   return (
     <>
       <Box

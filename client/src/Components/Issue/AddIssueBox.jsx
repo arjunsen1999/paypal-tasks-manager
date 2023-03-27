@@ -11,6 +11,7 @@ import {
   Text,
   Textarea,
   useDisclosure,
+  useToast,
 } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { AddIcon } from "@chakra-ui/icons";
@@ -31,6 +32,8 @@ import {
   AutoCompleteGroup,
   AutoCompleteFixedItem,
 } from "@choc-ui/chakra-autocomplete";
+import { useDispatch, useSelector } from "react-redux";
+import { add_issue } from "../../redux/Issue/Issue.action";
 
 export default function AddIssueBox({ title, sprintId }) {
   return (
@@ -45,6 +48,10 @@ export default function AddIssueBox({ title, sprintId }) {
 }
 
 function DrawerEx({ title, sprintId }) {
+  const toast = useToast();
+  const dispatch = useDispatch();
+  const { user } = useSelector((state) => state.userLogin);
+  const { isLoading_button} = useSelector((state) => state.issue);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const btnRef = React.useRef();
   const [formData, setFormData] = useState({
@@ -88,11 +95,17 @@ function DrawerEx({ title, sprintId }) {
     if(assign_to){
       data.assign_to = assign_to;
     }else{
-      alert("Somthing");
+      toast({
+        title: `Error`,
+        position: "top",
+        isClosable: true,
+        status: "error",
+        description: "Please fill assign to",
+      });
       return;
     }
    
-    console.log(data)
+    dispatch(add_issue(user.token, data))
   }
 
   return (
@@ -192,7 +205,17 @@ function DrawerEx({ title, sprintId }) {
             >
               Cancel
             </Button>
-            <Button colorScheme="teal" onClick={handleClick}>Create</Button>
+            {
+              isLoading_button?  <Button
+              isLoading
+              loadingText="Create"
+              colorScheme="teal"
+              mr={3}
+            >
+              Create
+            </Button> : <Button colorScheme="teal" onClick={handleClick}>Create</Button>
+            }
+            
           </DrawerFooter>
         </DrawerContent>
       </Drawer>

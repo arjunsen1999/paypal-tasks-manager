@@ -10,7 +10,7 @@ import {
     isLoading_button: false,
     loader: true,
     isSuccess: false,
-    isError: true,
+    isError: false,
     message: "",
   };
   
@@ -46,7 +46,7 @@ import {
           return {
               ...state,
               isSuccess : false,
-              isError: true,
+              isError: false,
               message: "",
           }
   
