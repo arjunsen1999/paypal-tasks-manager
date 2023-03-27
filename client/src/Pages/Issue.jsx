@@ -5,9 +5,11 @@ import { useParams } from "react-router-dom";
 import AddIssueBox from "../Components/Issue/AddIssueBox";
 import IssueHeading from "../Components/Issue/IssueHeading";
 import ShowIssueBox from "../Components/Issue/ShowIssueBox";
+import IssueLoading from "../Loading-page/IssueLoading";
 import { issue_reset } from "../redux/Issue/Issue.actionType";
 
 export default function Issue() {
+  const [issueIsLoading, setIssueIsLoading] = useState(true);
   const { id } = useParams("id");
   const dispatch = useDispatch();
   const toast = useToast();
@@ -46,6 +48,7 @@ export default function Issue() {
     } catch (error) {
       console.log(error);
     }
+    setIssueIsLoading(false);
   };
   useEffect(() => {
       // For Error
@@ -73,7 +76,7 @@ export default function Issue() {
   }, [isSuccess, isError]);
   return (
     <>
-      <Box
+    { issueIsLoading? <IssueLoading />: <Box
         display={"grid"}
         gridTemplateColumns={{ sm: "1fr", md: "1fr", lg: "1fr 1fr 1fr" }}
         gap={"20px"}
@@ -93,7 +96,7 @@ export default function Issue() {
           <AddIssueBox title="Story" sprintId={id}  />
           <ShowIssueBox data={sprintIssue.story}/>
         </Box>
-      </Box>
+      </Box>}
     </>
   );
 }
