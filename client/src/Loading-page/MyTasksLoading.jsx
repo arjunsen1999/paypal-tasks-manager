@@ -12,15 +12,15 @@ export default function MyTasksLoading() {
       >
         <Box>
           <Skeleton height="30px" w="150px" mb="20px" />
-          <Skeleton height="500px" w="100%" />
+          <Skeleton height="600px" w="100%" />
         </Box>
         <Box>
           <Skeleton height="30px" w="150px" mb="20px" />
-          <Skeleton height="500px" w="100%" />
+          <Skeleton height="600px" w="100%" />
         </Box>
         <Box>
           <Skeleton height="30px" w="150px" mb="20px" />
-          <Skeleton height="500px" w="100%" />
+          <Skeleton height="600px" w="100%" />
         </Box>
       </Box>
     </>

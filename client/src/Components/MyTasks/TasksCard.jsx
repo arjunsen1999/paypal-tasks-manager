@@ -45,8 +45,16 @@ import {
   ModalCloseButton,
 } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { updateIssueStatus } from "../../redux/Issue/Issue.action";
 
-export default function TasksCard() {
+
+export default function TasksCard({sprintId, title, important, description, create_by, _id}) {
+  const dispatch = useDispatch();
+  const { user } = useSelector((state) => state.userLogin);
+  const handleClick = (status) =>{
+    dispatch(updateIssueStatus(user.token, _id, status))
+  }
   return (
     <>
       <Box bg="#EDF2F7" minH="100px" mb="10px">
@@ -65,33 +73,33 @@ export default function TasksCard() {
                 <Stack spacing={2} pl={3} align="left">
                   <Box alignItems="center">
                     <Heading align="left" fontSize="xl" mr={"20px"}>
-                      Name
+                      {sprintId.name}
                     </Heading>
                   </Box>
                   <Box>
-                    <Heading fontSize={"18px"}>Title</Heading>
+                    <Heading fontSize={"18px"}>{title}</Heading>
                   </Box>
-                  <Box>
-                    <Badge variant="outline" colorScheme="green">
-                      Default
-                    </Badge>
+                  <Box>{
+                    important?<Badge variant="outline" colorScheme="red">
+                    Important
+                  </Badge> : null
+                    }
+                    
                   </Box>
                   <Box mb="10px">
                     <Text textAlign={"left"}>
-                      Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                      Hic maiores sequi consequuntur? Lorem ipsum dolor sit amet
-                      consectetur adipisicing elit. Et error pariatur placeat.
+                      {description}
                     </Text>
                   </Box>
                   <Box mb="10px">
                     <Text textAlign={"left"}>
-                      24/May/22 3:55 PM - 28/May/22 3:55 PM
+                      {sprintId.start_date} - {sprintId.end_date}
                     </Text>
                   </Box>
                   <Box>
                     <Text>
                       Created by:{" "}
-                      <span style={{ fontWeight: "bold" }}>Arjun Sen</span>
+                      <span style={{ fontWeight: "bold" }}>{create_by.username}</span>
                     </Text>
                   </Box>
                   {/* <Tags skills={skills} display={['none', 'none', 'flex', 'flex']} /> */}
@@ -103,8 +111,8 @@ export default function TasksCard() {
                     <BsThreeDots />
                   </MenuButton>
                   <MenuList>
-                    <MenuItem>Progress</MenuItem>
-                    <MenuItem>Done</MenuItem>
+                    <MenuItem onClick={() => handleClick("progress")}>Progress</MenuItem>
+                    <MenuItem onClick={() => handleClick("done")}>Done</MenuItem>
                   </MenuList>
                 </Menu>
               </Stack>

@@ -15,6 +15,9 @@ const {
 const {
   updateIssueController,
 } = require("../../controller/issue/updateIssue.controller");
+const {
+  userUpdateStatusController,
+} = require("../../controller/issue/userUpdateStatus.controller");
 const { verifyManagerToken } = require("../../middleware/verifyManagerToken");
 const { verifyToken } = require("../../middleware/verifyToken");
 
@@ -44,6 +47,14 @@ issueRouter
 issueRouter
   .route("/update/:id")
   .patch(verifyManagerToken, updateIssueController);
+
+issueRouter
+  .route("/update/status/:id")
+  .patch(
+    [body("status", "Somthing Went Wrong").not().isEmpty()],
+    verifyToken,
+    userUpdateStatusController
+  );
 
 module.exports = {
   issueRouter,
