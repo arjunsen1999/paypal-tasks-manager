@@ -17,7 +17,7 @@ const userUpdateStatusController = asyncHandler(async (req, res) => {
       return res.status(400).send({ error: "This issue not exists any more" });
     }
     await issueModel.findByIdAndUpdate({ _id }, { status });
-    return res.end();
+    return res.send({msg : "Update Status"});
   } catch (error) {
     return res.status(500).send({ error: "Somthing Went Wrong!" });
   }
